@@ -1,0 +1,31 @@
+﻿extends layout
+block main
+  - var articles = data.articles
+  - if (articles.length !== 0)
+        each article in articles
+          pre
+            .page-header
+              h2
+                a(href='/article?id=' + article.id) #{article.title}
+                small 　作者：#{article.author}
+                  br
+                  发布时间：#{new Date(article.time).toLocaleString()}
+            - if (article.imgSrc)
+              img(class='simpleImg', src=article.imgSrc)
+            p #{article.simpleContent}
+            //p
+              a.btn(href='/article?id=' + article.id) 查看原文
+        ul.pager
+          - if (data.url.match('page'))
+            - data.url = data.url.replace(/\&?page\=[^\&]+/,'')
+          - if (!data.url.match('\\?'))
+            - data.url += '?'
+          - if(articles.prev)
+              li
+                a(href= data.url + '&page=' + articles.prev) 上一页
+          - if(articles.next)
+              li
+                a(href= data.url + '&page=' + articles.next) 下一页
+  - else
+      .page-header
+        h2 居然一篇文章都没有，快去写一篇吧→                      
